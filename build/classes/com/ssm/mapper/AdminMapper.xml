@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssm.mapper.AdminMapper">
+  
+  
+ <update id="updateAdmin" parameterType="com.ssm.pojo.Admin">
+    update t_admin
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null">
+        pwd = #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="wrongtimes != null">
+        wrongtimes = #{wrongtimes,jdbcType=INTEGER},
+      </if>
+      <if test="lasttime != null">
+        lasttime = #{lasttime,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null">
+        role = #{role,jdbcType=VARCHAR},
+      </if>
+      
+    </set>
+    where name=#{name}
+  </update>
+  
+  <select id="selectByusernameAndPwd" parameterType="com.ssm.pojo.Admin" resultType="com.ssm.pojo.Admin">
+    select * from t_admin where name=#{name} and pwd=#{pwd}
+  </select>
+  
+  <select id="selectByusername" parameterType="String" resultType="com.ssm.pojo.Admin">
+    select * from t_admin where name=#{name}
+  </select>
+  
+  <select id="selectById" parameterType="Integer" resultType="com.ssm.pojo.Admin">
+    select * from t_admin where id=#{id}
+  </select>
+  
+  <select id="selectAll"  resultType="com.ssm.pojo.Admin">
+    select * from t_admin
+  </select>
+  
+  <insert id="insert" parameterType="com.ssm.pojo.Admin" >
+  	insert into t_admin(name,pwd,role) values(#{name},#{pwd},#{role})
+  </insert>
+  
+  <delete id="deleteByName" parameterType="String">
+  	delete from t_admin where name=#{name}
+  </delete>
+  
+  <delete id="deleteById" parameterType="Integer">
+  	delete from t_admin where id=#{id}
+  </delete>
+  
+  
+</mapper>

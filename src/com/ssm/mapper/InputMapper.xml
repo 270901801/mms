@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssm.mapper.InputMapper">
+  <resultMap id="BaseResultMap" type="com.ssm.pojo.Input">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="pcount" jdbcType="INTEGER" property="pcount" />
+    <result column="dprice" jdbcType="DECIMAL" property="dprice" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="annt" jdbcType="VARCHAR" property="annt" />
+    <result column="pname" jdbcType="VARCHAR" property="pname" />
+    <result column="inputtime" jdbcType="TIMESTAMP" property="inputtime" />
+  </resultMap>
+  
+  <select id="selectAll" resultType="com.ssm.pojo.Input">
+  	select * from t_input
+  </select>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, name, pcount, dprice, price, annt, pname, inputtime
+  </sql>
+  <select id="selectByExample" parameterType="com.ssm.pojo.InputExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_input
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+   <select id="selectByKeyword" resultType="com.ssm.pojo.Input" parameterType="map">
+  	select * from t_input
+  	<where>
+  		<if test="name!=''">
+  			and name like '%${name}%' 
+  		</if>
+  		<if test="startDate!=''">
+  			<if test="enDate!=''">
+  				and inputtime between #{startDate} and #{enDate} 
+  			</if>
+  			<if test="enTime==''">
+  				and inputtime > #{startDate} 
+  			</if>
+  		</if>
+  		<if test="annt!=''">
+  			and annt like '%${annt}%'
+  		</if>
+  		<if test="pname!=''">
+  			and pname = #{pname}
+  		</if>
+  	</where>
+  </select>
+  <select id="selectByGroupName" resultType="com.ssm.pojo.Input">
+  	select name,sum(pcount) as pcount, sum(price) as price from t_input group by name order by id asc
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_input
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_input
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ssm.pojo.InputExample">
+    delete from t_input
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  
+  <insert id="insert" parameterType="com.ssm.pojo.Input">
+    insert into t_input
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="pcount != null">
+        pcount,
+      </if>
+      <if test="dprice != null">
+        dprice,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="annt != null">
+        annt,
+      </if>
+      <if test="pname != null">
+        pname,
+      </if>
+      <if test="inputtime != null">
+        inputtime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pcount != null">
+        #{pcount,jdbcType=INTEGER},
+      </if>
+      <if test="dprice != null">
+        #{dprice,jdbcType=DECIMAL},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="annt != null">
+        #{annt,jdbcType=VARCHAR},
+      </if>
+      <if test="pname != null">
+        #{pname,jdbcType=VARCHAR},
+      </if>
+      <if test="inputtime != null">
+        #{inputtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ssm.pojo.InputExample" resultType="java.lang.Long">
+    select count(*) from t_input
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_input
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pcount != null">
+        pcount = #{record.pcount,jdbcType=INTEGER},
+      </if>
+      <if test="record.dprice != null">
+        dprice = #{record.dprice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.price != null">
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.annt != null">
+        annt = #{record.annt,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pname != null">
+        pname = #{record.pname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inputtime != null">
+        inputtime = #{record.inputtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update t_input
+    set id = #{record.id,jdbcType=INTEGER},
+      name = #{record.name,jdbcType=VARCHAR},
+      pcount = #{record.pcount,jdbcType=INTEGER},
+      dprice = #{record.dprice,jdbcType=DECIMAL},
+      price = #{record.price,jdbcType=DECIMAL},
+      annt = #{record.annt,jdbcType=VARCHAR},
+      pname = #{record.pname,jdbcType=VARCHAR},
+      inputtime = #{record.inputtime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ssm.pojo.Input">
+    update t_input
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="pcount != null">
+        pcount = #{pcount,jdbcType=INTEGER},
+      </if>
+      <if test="dprice != null">
+        dprice = #{dprice,jdbcType=DECIMAL},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="annt != null">
+        annt = #{annt,jdbcType=VARCHAR},
+      </if>
+      <if test="pname != null">
+        pname = #{pname,jdbcType=VARCHAR},
+      </if>
+      <if test="inputtime != null">
+        inputtime = #{inputtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ssm.pojo.Input">
+    update t_input
+    set name = #{name,jdbcType=VARCHAR},
+      pcount = #{pcount,jdbcType=INTEGER},
+      dprice = #{dprice,jdbcType=DECIMAL},
+      price = #{price,jdbcType=DECIMAL},
+      annt = #{annt,jdbcType=VARCHAR},
+      pname = #{pname,jdbcType=VARCHAR},
+      inputtime = #{inputtime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

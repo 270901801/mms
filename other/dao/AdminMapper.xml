@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.hzit.ssm.AdminMapper">
+	<select id="findAll" resultType="com.hzit.ssm.pojo.Admin">
+		select * from t_admin
+	</select>
+	
+	
+	<select id="findById" parameterType="Integer" resultType="com.hzit.ssm.pojo.Admin">
+		select * from t_admin where id=#{id}
+	</select>
+	
+	<!-- 模糊查詢 -->
+	<select id="findAllByName" resultType="com.hzit.ssm.pojo.Admin" parameterType="String">
+		select * from t_admin where name like '%${value}%'
+	</select>
+	
+	<insert id="insertAdmin" parameterType="admin">
+		insert into t_admin values(null,#{name},#{pwd},#{state}) 
+	</insert>
+	
+	
+	<delete id="deleteAdmin" parameterType="Integer">
+		delete from t_admin where id=#{id}
+	
+	</delete>
+	
+	<!-- <update id="updateAdmin" parameterType="admin">
+		update t_admin set name=#{name}, pwd=#{pwd},state=#{state} where id=#{id} 
+	</update> -->
+	
+	<!-- 动态sql -->
+	<update id="updateAdmin" parameterType="admin">
+		update t_admin 
+		<set>
+			<if test="name!='' and name!=null"> 
+				name=#{name},
+			</if>
+			<if test="pwd!='' and pwd!=null"> 
+				pwd=#{pwd},
+			</if>
+			<if test="state!='' and state!=null"> 
+				state=#{state}
+			</if>
+		</set> 
+			where id=#{id} 
+	</update>
+</mapper>
